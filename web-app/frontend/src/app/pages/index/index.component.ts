@@ -86,6 +86,8 @@ export class IndexComponent implements OnInit, OnDestroy {
         this.poller.reset();
       }),
     );
+
+    this.listenForNamespace();
   }
 
   ngOnDestroy() {
@@ -213,5 +215,15 @@ export class IndexComponent implements OnInit, OnDestroy {
   // util functions
   public inferenceServiceTrackByFn(index: number, svc: InferenceServiceK8s) {
     return `${svc.metadata.name}/${svc.metadata.creationTimestamp}`;
+  }
+
+  private listenForNamespace() {
+    window.addEventListener('message', (event) => {
+      this.ns.updateSelectedNamespace(event.data);
+
+      const sourceWindow = event.source as Window;
+
+      sourceWindow.postMessage(event.data, '*');
+    }, false);
   }
 }

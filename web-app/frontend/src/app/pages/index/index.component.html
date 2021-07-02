@@ -1,7 +1,3 @@
-<lib-namespace-select
-  *ngIf="(ns.dashboardConnected$ | async) === dashboardDisconnectedState"
-></lib-namespace-select>
-
 <lib-resource-table
   [config]="config"
   [data]="inferenceServices"
