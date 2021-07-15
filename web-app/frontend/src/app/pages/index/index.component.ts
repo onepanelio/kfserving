@@ -27,6 +27,7 @@ import {
   getK8sObjectUiStatus,
   getPredictorExtensionSpec,
 } from 'src/app/shared/utils';
+import { ParentFrameService } from "../../onepanel/parent-frame.service";
 
 @Component({
   selector: 'app-index',
@@ -50,6 +51,7 @@ export class IndexComponent implements OnInit, OnDestroy {
     private router: Router,
     private clipboard: Clipboard,
     public ns: NamespaceService,
+    private parentFrameService: ParentFrameService
   ) {}
 
   ngOnInit() {
@@ -87,7 +89,15 @@ export class IndexComponent implements OnInit, OnDestroy {
       }),
     );
 
-    this.listenForNamespace();
+    if (this.parentFrameService.hasNamespace) {
+      this.ns.updateSelectedNamespace(this.parentFrameService.namespace);
+    }
+
+    this.parentFrameService.namespaceChange.subscribe(namespace => {
+      this.ns.updateSelectedNamespace(this.parentFrameService.namespace);
+    });
+
+    this.parentFrameService.sendIndexNavigation(this.currNamespace);
   }
 
   ngOnDestroy() {
@@ -107,7 +117,6 @@ export class IndexComponent implements OnInit, OnDestroy {
         this.deleteClicked(svc);
         break;
       case 'copy-link':
-        console.log(`Copied to clipboard: ${svc.status.url}`);
         this.clipboard.copy(svc.status.url);
         this.snack.open(`Copied: ${svc.status.url}`, SnackType.Info, 4000);
         break;
@@ -125,6 +134,8 @@ export class IndexComponent implements OnInit, OnDestroy {
 
           return;
         }
+
+        this.parentFrameService.sendModelDetailNavigation(this.currNamespace, a.data.metadata.name);
 
         this.router.navigate([
           '/details/',
@@ -215,15 +226,5 @@ export class IndexComponent implements OnInit, OnDestroy {
   // util functions
   public inferenceServiceTrackByFn(index: number, svc: InferenceServiceK8s) {
     return `${svc.metadata.name}/${svc.metadata.creationTimestamp}`;
-  }
-
-  private listenForNamespace() {
-    window.addEventListener('message', (event) => {
-      this.ns.updateSelectedNamespace(event.data);
-
-      const sourceWindow = event.source as Window;
-
-      sourceWindow.postMessage(event.data, '*');
-    }, false);
   }
 }

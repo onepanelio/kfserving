@@ -6,6 +6,7 @@ import {
   getK8sObjectStatus,
 } from 'src/app/shared/utils';
 import { InferenceServiceK8s } from 'src/app/types/kfserving/v1beta1';
+import { ParentFrameService } from '../../../onepanel/parent-frame.service';
 
 @Component({
   selector: 'app-details',
@@ -106,5 +107,8 @@ export class DetailsComponent {
     }
 
     return chips;
+  }
+
+  constructor(private parentFrameService: ParentFrameService) {
   }
 }
