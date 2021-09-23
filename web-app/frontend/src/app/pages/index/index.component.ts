@@ -200,6 +200,9 @@ export class IndexComponent implements OnInit, OnDestroy {
     svc.ui.actions.delete = this.getDeletionActionStatus(svc);
 
     const predictor = getPredictorExtensionSpec(svc.spec.predictor);
+    if (!predictor) {
+      return;
+    }
 
     svc.ui.predictorType = getPredictorType(svc.spec.predictor);
     svc.ui.runtimeVersion = predictor.runtimeVersion;

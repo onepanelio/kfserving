@@ -22,11 +22,11 @@
 </lib-details-list-item>
 
 <lib-details-list-item key="Runtime">
-  {{ predictorType }} {{ basePredictor.runtimeVersion }}
+  {{ predictorType }} {{ basePredictor?.runtimeVersion }}
 </lib-details-list-item>
 
 <lib-details-list-item key="Protocol Version">
-  {{ basePredictor.protocolVersion }}
+  {{ basePredictor?.protocolVersion }}
 </lib-details-list-item>
 
 <lib-panel *ngIf="!svc.status" class="lib-panel">

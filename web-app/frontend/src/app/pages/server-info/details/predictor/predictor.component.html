@@ -3,14 +3,14 @@
 </lib-details-list-item>
 
 <lib-details-list-item key="Runtime">
-  {{ predictorType }} {{ basePredictor.runtimeVersion }}
+  {{ predictorType }} {{ basePredictor?.runtimeVersion }}
 </lib-details-list-item>
 
 <lib-details-list-item
   key="Protocol version"
-  *ngIf="basePredictor.protocolVersion"
+  *ngIf="basePredictor?.protocolVersion"
 >
-  {{ basePredictor.protocolVersion }}
+  {{ basePredictor?.protocolVersion }}
 </lib-details-list-item>
 
 <lib-details-list-item
@@ -21,10 +21,10 @@
 </lib-details-list-item>
 
 <!--Pod Spec-->
-<app-pod-details [pod]="predictorSpec"></app-pod-details>
+<app-pod-details *ngIf="predictorSpec" [pod]="predictorSpec"></app-pod-details>
 
 <!--Predictor Extension-->
-<app-component-extension [ext]="predictorSpec"></app-component-extension>
+<app-component-extension *ngIf="predictorSpec" [ext]="predictorSpec"></app-component-extension>
 
 <!--Container-->
-<app-container-details [container]="basePredictor"></app-container-details>
+<app-container-details *ngIf="basePredictor" [container]="basePredictor"></app-container-details>
